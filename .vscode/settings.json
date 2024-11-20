@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "*.py": "python",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "string": "cpp",
+        "fstream": "cpp"
     }
 }
