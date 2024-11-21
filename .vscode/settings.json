@@ -3,6 +3,7 @@
         "*.py": "python",
         "stdexcept": "cpp",
         "string": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "iostream": "cpp"
     }
 }

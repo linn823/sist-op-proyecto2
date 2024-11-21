@@ -10,8 +10,7 @@ CircularQueue::CircularQueue(size_t initCapacity, Monitor &mon) : monitor(mon) {
     capacity = initCapacity;
 }
 
-void CircularQueue::resize(bool expand) {
-    monitor.lock();
+void CircularQueue::resize(bool expand) { // deberia llamarse a resize solo si el monitor esta lock (desde enqueue/dequeue)
     size_t newCapacity = expand ? capacity * 2 : capacity / 2;
     vector<int> newQueue(newCapacity);
 
@@ -19,35 +18,34 @@ void CircularQueue::resize(bool expand) {
         newQueue[i] = queue[(head + i) % capacity];
     }
 
-    queue = move(newQueue);
+    queue = std::move(newQueue);
     head = 0;
     tail = size;
     capacity = newCapacity;
-    monitor.unlock();
 }
 
 void CircularQueue::enqueue(int value) {
     monitor.lock();
     if (size == capacity) {
-        resize(true);
+        resize(true); // si ya se alcanzo el limite de capacidad, agrandar
     }
     queue[tail] = value;
     tail = (tail + 1) % capacity;
     size++;
-    monitor.notify();
+    monitor.notify(); // notifica que hay almenos un elemento en la cola por si alguien espera a sacar
     monitor.unlock();
 }
 
 int CircularQueue::dequeue() {
     monitor.lock();
-    while (size == 0) {
+    while (size == 0) { // si se quiere sacar algo de la cola y esta vacia, se quedara esperando
         monitor.wait();
     }
     int value = queue[head];
     head = (head + 1) % capacity;
     size--;
     if (size < capacity / 4 && capacity > 1) {
-        resize(false);
+        resize(false); // si el tamaño alcanzo 1/4 de la capacidad, achicar
     }
     monitor.unlock();
     return value;

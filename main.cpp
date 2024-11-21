@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <thread>
 #include <vector>
 #include <mutex>
@@ -13,7 +14,7 @@ mutex logMutex;
 void iniciarLog(const string &filename) {
     logFile.open(filename, ios::out | ios::app);
     if (!logFile) {
-        cerr << "Error: Unable to open log file" << endl;
+        cout << "no se pudo abrir archivo log" << endl;
         exit(EXIT_FAILURE);
     }
 }
@@ -32,20 +33,27 @@ void cerrarLog() {
 }
 
 void parseArguments(int argc, char *argv[], int &producers, int &consumers, int &initQueueSize, int &maxWaitTime) {
-    int opt;
-    while ((opt = getopt(argc, argv, "p:c:s:t:")) != -1) {
-        switch (opt) {
-            case 'p': producers = stoi(optarg); break;
-            case 'c': consumers = stoi(optarg); break;
-            case 's': initQueueSize = stoi(optarg); break;
-            case 't': maxWaitTime = stoi(optarg); break;
-            default: cerr << "Error en los argumentos\n"; exit(1);
+    int i = 1;
+    while (i < argc) {
+        string arg = argv[i];
+        if (arg == "-p" && i + 1 < argc) {
+            producers = stoi(argv[++i]);
+        } else if (arg == "-c" && i + 1 < argc) {
+            consumers = stoi(argv[++i]);
+        } else if (arg == "-s" && i + 1 < argc) {
+            initQueueSize = stoi(argv[++i]);
+        } else if (arg == "-t" && i + 1 < argc) {
+            maxWaitTime = stoi(argv[++i]);
+        } else {
+            cout << "Error en los argumentos\n";
+            exit(1);
         }
+        i++;
     }
 }
 
 void producerFunction(CircularQueue &queue, int id) {
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i) { // produce 10 elementos
         queue.enqueue(i);
         log("Productor " + to_string(id) + " añadio " + to_string(i));
     }
@@ -53,13 +61,8 @@ void producerFunction(CircularQueue &queue, int id) {
 
 void consumerFunction(CircularQueue &queue, int id, int maxWaitTime) {
     while (true) {
-        try {
-            int value = queue.dequeue();
-            log("Consumidor " + to_string(id) + " quito " + to_string(value));
-        } catch (const runtime_error &) {
-            
-            break;
-        }
+        int value = queue.dequeue();
+        log("Consumidor " + to_string(id) + " quito " + to_string(value));
     }
 }
 
