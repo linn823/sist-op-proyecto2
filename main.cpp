@@ -55,7 +55,7 @@ void parseArguments(int argc, char *argv[], int &producers, int &consumers, int 
 void producerFunction(CircularQueue &queue, int id) {
     for (int i = 0; i < 10; ++i) { // produce 10 elementos
         queue.enqueue(i);
-        log("Productor " + to_string(id) + " añadio " + to_string(i));
+        log("Productor " + to_string(id) + " añadio " + to_string(i + id*1000));
     }
 }
 
@@ -76,20 +76,20 @@ int main(int argc, char *argv[]) {
 
     vector<thread> producerThreads, consumerThreads;
 
-    for (int i = 0; i < producers; ++i) {
-        producerThreads.emplace_back(producerFunction, ref(queue), i);
-    }
-
-    for (int i = 0; i < consumers; ++i) {
+    for (int i = 0; i < consumers; i++) {
         consumerThreads.emplace_back(consumerFunction, ref(queue), i, maxWaitTime);
     }
 
-    for (size_t i = 0; i < producerThreads.size(); ++i) {
-        producerThreads[i].join();
+    for (int i = 0; i < producers; i++) {
+        producerThreads.emplace_back(producerFunction, ref(queue), i);
     }
 
-    for (size_t i = 0; i < consumerThreads.size(); ++i) {
+    for (size_t i = 0; i < consumerThreads.size(); i++) {
         consumerThreads[i].join();
+    }
+
+    for (size_t i = 0; i < producerThreads.size(); i++) {
+        producerThreads[i].join();
     }
 
     cerrarLog();

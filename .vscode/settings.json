@@ -4,6 +4,8 @@
         "stdexcept": "cpp",
         "string": "cpp",
         "fstream": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "vector": "cpp",
+        "type_traits": "cpp"
     }
 }
