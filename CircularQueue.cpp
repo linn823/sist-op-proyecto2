@@ -33,6 +33,8 @@ void CircularQueue::enqueue(int value) {
     queue[tail] = value;
     tail = (tail + 1) % capacity;
     size++;
+
+    logger.log("Se añadio " + to_string(value));
     monitor.notify(); // notifica que hay almenos un elemento en la cola por si alguien espera a sacar
     monitor.unlock();
 }
@@ -46,9 +48,12 @@ int CircularQueue::dequeue() {
     int value = queue[head];
     head = (head + 1) % capacity;
     size--;
+
     if (size < capacity / 4 && capacity > 1) {
         resize(false); // si el tamaño alcanzo 1/4 de la capacidad, achicar
     }
+
+    logger.log("Se quito " + to_string(value));
     monitor.unlock();
     return value;
 }

@@ -35,8 +35,7 @@ void parseArguments(int argc, char *argv[], int &producers, int &consumers, int 
 
 void producerFunction(CircularQueue &queue, int id) {
     for (int i = 0; i < 5; ++i) { // produce 5 elementos
-        queue.enqueue(i);
-        logger.log("Productor " + to_string(id+1) + " añadio " + to_string(i + (id+1)*1000));
+        queue.enqueue(i + (id+1)*1000);
     }
 }
 
@@ -46,7 +45,6 @@ void consumerFunction(CircularQueue &queue, int id, int maxWaitTime) {
     while (true) {
         int value = queue.dequeue();
         if(value != -1){
-            logger.log("Consumidor " + to_string(id+1) + " quito " + to_string(value));
             startTime = std::chrono::steady_clock::now();
         }
         else{ // si el valor es -1 entonces no saco nada de la cola
@@ -54,7 +52,6 @@ void consumerFunction(CircularQueue &queue, int id, int maxWaitTime) {
             int tiempo_pasado = std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count();
 
             if (tiempo_pasado >= maxWaitTime) {
-                log("El consumidor " + to_string(id+1) + " espero " + to_string(maxWaitTime) + " segundos y termino.");
                 break;
             }
         }

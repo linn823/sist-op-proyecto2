@@ -1,0 +1,116 @@
+Se añadio 3000
+Se añadio 4000
+Se cambio la capacidad de la cola a 4
+Se añadio 5000
+Se añadio 5001
+Se cambio la capacidad de la cola a 8
+Se añadio 5002
+Se añadio 5003
+Se añadio 5004
+Se añadio 2000
+Se cambio la capacidad de la cola a 16
+Se añadio 2001
+Se añadio 2002
+Se añadio 2003
+Se añadio 2004
+Se quito 3000
+Se quito 4000
+Se quito 5000
+Se quito 5001
+Se quito 5002
+Se quito 5003
+Se quito 5004
+Se añadio 3001
+Se añadio 3002
+Se añadio 3003
+Se añadio 3004
+Se quito 2000
+Se quito 2001
+Se quito 2002
+Se quito 2003
+Se quito 2004
+Se cambio la capacidad de la cola a 8
+Se quito 3001
+Se quito 3002
+Se cambio la capacidad de la cola a 4
+Se quito 3003
+Se cambio la capacidad de la cola a 2
+Se quito 3004
+Se añadio 8000
+Se añadio 8001
+Se cambio la capacidad de la cola a 4
+Se añadio 8002
+Se añadio 8003
+Se cambio la capacidad de la cola a 8
+Se añadio 8004
+Se añadio 4001
+Se añadio 4002
+Se añadio 4003
+Se cambio la capacidad de la cola a 16
+Se añadio 4004
+Se añadio 6000
+Se añadio 6001
+Se añadio 6002
+Se añadio 6003
+Se añadio 6004
+Se añadio 7000
+Se añadio 7001
+Se cambio la capacidad de la cola a 32
+Se añadio 7002
+Se añadio 7003
+Se añadio 7004
+Se quito 8000
+Se quito 8001
+Se quito 8002
+Se quito 8003
+Se quito 8004
+Se quito 4001
+Se quito 4002
+Se añadio 1000
+Se añadio 1001
+Se añadio 1002
+Se añadio 1003
+Se añadio 1004
+Se quito 4003
+Se quito 4004
+Se quito 6000
+Se quito 6001
+Se añadio 9000
+Se añadio 9001
+Se añadio 9002
+Se añadio 9003
+Se añadio 9004
+Se quito 6002
+Se quito 6003
+Se quito 6004
+Se quito 7000
+Se quito 7001
+Se quito 7002
+Se quito 7003
+Se quito 7004
+Se quito 1000
+Se quito 1001
+Se cambio la capacidad de la cola a 16
+Se quito 1002
+Se quito 1003
+Se quito 1004
+Se quito 9000
+Se cambio la capacidad de la cola a 8
+Se quito 9001
+Se quito 9002
+Se cambio la capacidad de la cola a 4
+Se quito 9003
+Se cambio la capacidad de la cola a 2
+Se quito 9004
+Se añadio 10000
+Se quito 10000
+Se añadio 10001
+Se añadio 10002
+Se cambio la capacidad de la cola a 4
+Se añadio 10003
+Se añadio 10004
+Se quito 10001
+Se quito 10002
+Se quito 10003
+Se cambio la capacidad de la cola a 2
+Se quito 10004
