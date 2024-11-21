@@ -14,8 +14,8 @@ mutex logMutex;
 void iniciarLog(const string &filename) {
     logFile.open(filename, ios::out | ios::app);
     if (!logFile) {
-        cout << "no se pudo abrir archivo log" << endl;
-        exit(EXIT_FAILURE);
+        printf("No se pudo abrir archivo log\n");
+        exit(1);
     }
 }
 
@@ -45,7 +45,7 @@ void parseArguments(int argc, char *argv[], int &producers, int &consumers, int 
         } else if (arg == "-t" && i + 1 < argc) {
             maxWaitTime = stoi(argv[++i]);
         } else {
-            cout << "Error en los argumentos\n";
+            printf("Error en los argumentos\n");
             exit(1);
         }
         i++;
