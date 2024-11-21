@@ -4,11 +4,11 @@ using namespace std;
 
 Monitor::Monitor() {
     if (pthread_mutex_init(&mutex, nullptr) != 0) {
-        throw runtime_error("Failed to initialize mutex");
+        throw runtime_error("error al iniciar mutex");
     }
+    
     if (pthread_cond_init(&cond, nullptr) != 0) {
-        pthread_mutex_destroy(&mutex);
-        throw runtime_error("Failed to initialize condition variable");
+        throw runtime_error("error al iniciar variable de condicion");
     }
 }
 
@@ -31,8 +31,4 @@ void Monitor::wait() {
 
 void Monitor::notify() {
     pthread_cond_signal(&cond);
-}
-
-void Monitor::notifyAll() {
-    pthread_cond_broadcast(&cond);
 }

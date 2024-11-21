@@ -2,8 +2,13 @@
 
 using namespace std;
 
-CircularQueue::CircularQueue(size_t initCapacity, Monitor &mon)
-    : queue(initCapacity), head(0), tail(0), size(0), capacity(initCapacity), monitor(mon) {}
+CircularQueue::CircularQueue(size_t initCapacity, Monitor &mon) : monitor(mon) {
+    queue = std::vector<int>(initCapacity);
+    head = 0;
+    tail = 0;
+    size = 0;
+    capacity = initCapacity;
+}
 
 void CircularQueue::resize(bool expand) {
     monitor.lock();
@@ -28,7 +33,7 @@ void CircularQueue::enqueue(int value) {
     }
     queue[tail] = value;
     tail = (tail + 1) % capacity;
-    ++size;
+    size++;
     monitor.notify();
     monitor.unlock();
 }
@@ -40,7 +45,7 @@ int CircularQueue::dequeue() {
     }
     int value = queue[head];
     head = (head + 1) % capacity;
-    --size;
+    size--;
     if (size < capacity / 4 && capacity > 1) {
         resize(false);
     }

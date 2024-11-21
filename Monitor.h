@@ -18,7 +18,6 @@ public:
     void unlock();
     void wait();
     void notify();
-    void notifyAll();
 };
 
 #endif // MONITOR_H
