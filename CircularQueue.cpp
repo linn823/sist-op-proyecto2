@@ -2,7 +2,7 @@
 
 using namespace std;
 
-CircularQueue::CircularQueue(size_t initCapacity, Monitor &mon) : monitor(mon) {
+CircularQueue::CircularQueue(size_t initCapacity, Monitor &mon, Logger &log) : monitor(mon), logger(log){
     queue = std::vector<int>(initCapacity);
     head = 0;
     tail = 0;
@@ -13,6 +13,7 @@ CircularQueue::CircularQueue(size_t initCapacity, Monitor &mon) : monitor(mon) {
 void CircularQueue::resize(bool expand) { // deberia llamarse a resize solo si el monitor esta lock (desde enqueue/dequeue)
     size_t newCapacity = expand ? capacity * 2 : capacity / 2;
     vector<int> newQueue(newCapacity);
+    logger.log("Se cambio la capacidad de la cola a " + to_string(newCapacity));
 
     for (size_t i = 0; i < size; ++i) {
         newQueue[i] = queue[(head + i) % capacity];
@@ -39,7 +40,8 @@ void CircularQueue::enqueue(int value) {
 int CircularQueue::dequeue() {
     monitor.lock();
     while (size == 0) { // si se quiere sacar algo de la cola y esta vacia, se quedara esperando
-        monitor.wait();
+        monitor.unlock();
+        return -1; // no habia nada en la cola
     }
     int value = queue[head];
     head = (head + 1) % capacity;

@@ -5,32 +5,13 @@
 #include <mutex>
 #include "Monitor.h"
 #include "CircularQueue.h"
+#include "Logger.h"
 
 using namespace std;
 
 ofstream logFile;
 mutex logMutex;
-
-void iniciarLog(const string &filename) {
-    logFile.open(filename, ios::out | ios::app);
-    if (!logFile) {
-        printf("No se pudo abrir archivo log\n");
-        exit(1);
-    }
-}
-
-void log(const string &message) {
-    lock_guard<mutex> lock(logMutex);
-    if (logFile.is_open()) {
-        logFile << message << endl;
-    }
-}
-
-void cerrarLog() {
-    if (logFile.is_open()) {
-        logFile.close();
-    }
-}
+Logger logger("queue_log.txt");
 
 void parseArguments(int argc, char *argv[], int &producers, int &consumers, int &initQueueSize, int &maxWaitTime) {
     int i = 1;
@@ -53,16 +34,30 @@ void parseArguments(int argc, char *argv[], int &producers, int &consumers, int 
 }
 
 void producerFunction(CircularQueue &queue, int id) {
-    for (int i = 0; i < 10; ++i) { // produce 10 elementos
+    for (int i = 0; i < 5; ++i) { // produce 5 elementos
         queue.enqueue(i);
-        log("Productor " + to_string(id) + " añadio " + to_string(i + id*1000));
+        logger.log("Productor " + to_string(id+1) + " añadio " + to_string(i + (id+1)*1000));
     }
 }
 
 void consumerFunction(CircularQueue &queue, int id, int maxWaitTime) {
+    std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+
     while (true) {
         int value = queue.dequeue();
-        log("Consumidor " + to_string(id) + " quito " + to_string(value));
+        if(value != -1){
+            logger.log("Consumidor " + to_string(id+1) + " quito " + to_string(value));
+            startTime = std::chrono::steady_clock::now();
+        }
+        else{ // si el valor es -1 entonces no saco nada de la cola
+            std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+            int tiempo_pasado = std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count();
+
+            if (tiempo_pasado >= maxWaitTime) {
+                log("El consumidor " + to_string(id+1) + " espero " + to_string(maxWaitTime) + " segundos y termino.");
+                break;
+            }
+        }
     }
 }
 
@@ -71,8 +66,7 @@ int main(int argc, char *argv[]) {
     parseArguments(argc, argv, producers, consumers, initQueueSize, maxWaitTime);
     
     Monitor monitor;
-    CircularQueue queue(initQueueSize, monitor);
-    iniciarLog("queue_log.txt");
+    CircularQueue queue(initQueueSize, monitor, logger);
 
     vector<thread> producerThreads, consumerThreads;
 
@@ -91,8 +85,6 @@ int main(int argc, char *argv[]) {
     for (size_t i = 0; i < producerThreads.size(); i++) {
         producerThreads[i].join();
     }
-
-    cerrarLog();
 
     return 0;
 }
